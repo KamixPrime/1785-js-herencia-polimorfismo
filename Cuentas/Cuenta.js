@@ -1,44 +1,57 @@
 export class Cuenta {
-  #cliente;
-  #saldo;
+    #cliente;
+    #saldo;
 
-  constructor(cliente, numero, agencia, saldo) {
+    constructor(cliente, numero, agencia, saldo) {
 
-		if (this.constructor == Cuenta) {
+        if (this.constructor == Cuenta) {
+            throw new Error('No se debe instanciar objetos de la clase Cuenta');
+        }
+        this.numero = numero;
+        this.agencia = agencia;
+        this.#cliente = cliente;
+        this.#saldo = saldo;
+    }
 
-			throw new Error("No se deben instanciar objetos de la clase cuenta");
-		}
-    this.numero = numero;
-    this.agencia = agencia;
-    this.#cliente = cliente;
-    this.#saldo = saldo;
-  }
+    set cliente(valor) {
+        if (valor instanceof Cliente)
+            this.#cliente = valor;
+    }
 
-  depositoEnCuenta(valor) {
-    if (valor > 0) this.#saldo += valor;
-    return this.#saldo;
-  }
+    get cliente() {
+        return this.#cliente;
+    }
 
-  retirarDeCuenta(valor,comision) {
-		//Método abstracto
-		throw new Error("Debe implementar el metodo retirar de cuenta en su clase");
-  }
+    depositoEnCuenta(valor) {
+        if (valor > 0)
+            this.#saldo += valor;
+        return this.#saldo;
+    }
 
-	_retirarDeCuenta(valor,comision) {
-		valor = valor * (1+comision/100);
-    if (valor <= this.#saldo) this.#saldo -= valor;
-    return this.#saldo;
-  }
+    retirarDeCuenta(valor) {
+        //Método abstracto
+        throw new Error('Debe implementar el método retirarDeCuenta en su clase');
+    }
 
+    _retirarDeCuenta(valor, comision) {
+        valor = valor * (1+comision/100);
+        if (valor <= this.#saldo)
+            this.#saldo -= valor;
+        return this.#saldo;
+    }
 
-  verSaldo() {
-    return this.#saldo;
-  }
+    verSaldo() {
+        return this.#saldo;
+    }
 
-  transferirParaCuenta(valor, cuentaDestino) {
-    this.retirarDeCuenta(valor);
-    cuentaDestino.depositoEnCuenta(valor);
-    valor = 200;
-    valor = valor * 1000;
-  }
+    transferirParaCuenta(valor,cuentaDestino) {
+        this.retirarDeCuenta(valor);
+        cuentaDestino.depositoEnCuenta(valor);
+        valor = 200;
+        valor = valor*1000;
+    }
+
+    prueba() {
+        console.log('Método padre');
+    }
 }
